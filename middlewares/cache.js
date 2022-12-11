@@ -26,28 +26,28 @@ await client.connect();
 
 const cacheUsers = async (req, res, next) => {
   const data = await client.get("all_users");
-  if (data !== null) {
-    res.status(200).send(JSON.parse(data));
-  } else {
+  if (data == null || data == [] || data == "") {
     next();
+  } else {
+    res.status(200).send(JSON.parse(data));
   }
 };
 
 const cachePosts = async (req, res, next) => {
   const data = await client.get("all_posts");
-  if (data !== null) {
-    res.status(200).send(JSON.parse(data));
-  } else {
+  if (data == null || data == [] || data == "") {
     next();
+  } else {
+    res.status(200).send(JSON.parse(data));
   }
 };
 
 const cacheStories = async (req, res, next) => {
   const data = await client.get("all_stories");
-  if (data !== null) {
-    res.status(200).send(JSON.parse(data));
-  } else {
+  if (data == null || data == [] || data == "") {
     next();
+  } else {
+    res.status(200).send(JSON.parse(data));
   }
 };
 

@@ -100,7 +100,7 @@ mongoose.connection.once("open", () => {
 });
 
 app.get("/", (req, res) => {
-  res.status(200).json("server is up");
+  res.status(200).json(`server is running on ${port}`);
 });
 
 app.use("/api/user", user);
