@@ -6,7 +6,7 @@ import multer from "multer";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { GridFsStorage } from "multer-gridfs-storage";
-import { cacheUsers, client } from "../middlewares/cache.js";
+import {  cacheUsers, client } from "../middlewares/cache.js";
 import { deletePosts } from "../middlewares/background_worker.js";
 
 dotenv.config();
@@ -144,16 +144,6 @@ router.put(
     }
   }
 );
-
-router.delete("/test/:id", async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    const { _id } = user;
-    res.status(200).json("ok");
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
 
 router.delete("/delete/user/:id", async (req, res) => {
   if (req.body.id !== req.params.id) {

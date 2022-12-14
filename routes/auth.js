@@ -1,4 +1,5 @@
 import express from "express";
+import { generateToken, verifyToken } from "../middlewares/auth.js";
 import Geo from "../models/Geo.js";
 import User from "../models/User.js";
 import { encrypt, decrypt } from "../utils.js";
@@ -38,19 +39,33 @@ router.post("/signin", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      res.status(404).json({ message: "user not found!" });
-      return;
+      return res.status(404).json({ message: "user not found!" });
     }
     const validatePass = await decrypt(req.body.password, user);
     if (!validatePass) {
-      res.status(400).json({ message: "invalid credentials!" });
-      return;
+      return res.status(400).json({ message: "invalid credentials!" });
     }
-    await user.save();
     const { password, ...rest } = user._doc;
+    const token = await generateToken(rest._id);
+    res
+      .setHeader("Access-Control-Expose-Headers", "token")
+      .setHeader("token", token);
     res.status(200).json(rest);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
+  }
+});
+
+router.post("/reload", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.uid);
+    const { password, ...rest } = user._doc;
+    res
+      .setHeader("Access-Control-Expose-Headers", "token")
+      .setHeader("token", req.token);
+    res.status(200).json(rest);
+  } catch (error) {
+    res.status(500).json(error.message);
   }
 });
 
