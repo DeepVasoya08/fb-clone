@@ -6,8 +6,9 @@ import multer from "multer";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { GridFsStorage } from "multer-gridfs-storage";
-import {  cacheUsers, client } from "../middlewares/cache.js";
+import { cacheUsers, client } from "../middlewares/cache.js";
 import { deletePosts } from "../middlewares/background_worker.js";
+import { verifyToken } from "../middlewares/auth.js";
 
 dotenv.config();
 
@@ -145,7 +146,7 @@ router.put(
   }
 );
 
-router.delete("/delete/user/:id", async (req, res) => {
+router.delete("/delete/user/:id", verifyToken, async (req, res) => {
   if (req.body.id !== req.params.id) {
     return res.status(403).json({ message: "permission denied!" });
   }

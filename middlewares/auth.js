@@ -5,14 +5,13 @@ dotenv.config();
 
 const generateToken = async (payload) => {
   return jwt.sign({ uid: payload }, process.env.TOKEN, {
-    expiresIn: "24h",
+    expiresIn: '24h',
   });
 };
 
 const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers["authorization"].split(" ")[1];
-    console.log(token);
     if (!token) {
       return res.status(403).json("Auth token is required!!");
     }
@@ -21,7 +20,10 @@ const verifyToken = async (req, res, next) => {
     req.uid = data.uid;
     next();
   } catch (error) {
-    res.status(403).json({message:"You are logged out"});
+    if (error.message == "jwt expired") {
+      return res.status(403).json({ message: "reload" });
+    }
+    res.status(400).json({ message: "Something went wrong!" });
   }
 };
 
