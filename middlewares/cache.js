@@ -5,14 +5,15 @@ dotenv.config();
 
 const port = 6379;
 
-// export const client = redis.createClient({
-//   url: process.env.REDIS_URL,
-// });
+export const client = redis.createClient({
+  url: process.env.REDIS_URL,
+});
 
 // export const client = redis.createClient({
 //   url: "redis://redis:6379",
 // });
-export const client = redis.createClient(port);
+
+// export const client = redis.createClient(port);
 
 client.on("connect", () => {
   console.log("connected to redis");

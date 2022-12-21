@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 
-const port = process.env.PORT || 9000;
+const port = process.env.PORT;
 
 mongoose
   .connect(process.env.MONGO_URL, {
